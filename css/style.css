@@ -1,0 +1,73 @@
+/*
+** Fonts
+*/
+@font-face {
+    font-family: 'bangersregular';
+    src: url('font/bangers-regular-webfont.woff2') format('woff2'),
+         url('font/bangers-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+/*
+** Layout
+*/
+main {
+    width: 600px;
+    margin: 0 auto;
+}
+
+section#letter-container {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(13, 36px);
+    grid-template-rows: 40px;
+    border-top: thin solid #000;
+    padding-top: 10px;
+}
+
+section#hangman-container {
+    margin-bottom: 30px;
+    height: 280px;
+}
+
+section#answer-container {
+    height: 60px;
+    padding: 10px 0;
+    font-family: 'bangersregular';
+    font-size: 60px;
+    letter-spacing: 3px;
+    text-align: center;
+}
+
+/*
+** General
+*/
+h1 {
+    font-family: 'bangersregular';
+    text-align: center;
+    font-size: 60px;
+}
+
+figure {
+    font-family: 'bangersregular';
+    font-size: 24px;
+    border: thin solid #000;
+    width: 15px;
+    height: 20px;
+    padding: 10px; 
+    margin: 0;
+    cursor: pointer;
+    text-align: center;
+}
+
+section#hangman-container img {
+    width: 250px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+figure:hover {
+    background-color: #ebebeb;
+}
