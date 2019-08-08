@@ -7,7 +7,7 @@
     <title>Hang Man</title>
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
-<body>
+<body onload="apiHandler.load()">
     <main>
         <div id="hangman-container">
             <img id="hangman" src="img/hangman-0.jpg" alt="The Hang Man">
@@ -45,22 +45,22 @@
             <figure>Z</figure>
         </div>
     </main>
-    
 
+
+    <!-- overlay menus -->
     <div id="game-over" class="hide">
         <span>YOU LOSE!</span>
-        <a href="index.html">Play Again?</a>
+        <a href="#" onclick="view.playGame()">Play Again?</a>
     </div>
     <div id="you-win" class="hide">
         <span>YOU WIN!</span>
-        <a href="index.html">Play Again?</a>
+        <a href="#" onclick="view.playGame()">Play Again?</a>
     </div>
     <div id="main-menu">
         <span>Welcome to Hang Man!</span>
         <a href="#" onclick="view.playGame()">Play!</a>
     </div>
-    <div id="overlay">
-    </div>
+    <div id="overlay"></div>
 
 
     <script src="js/app.js"></script>

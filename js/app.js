@@ -1,15 +1,37 @@
-/**NOTES
- * having both chancesLeft and hangIndex is kind of redundant.
- * having my functions directly modify global variables does not follow functional programming methodology
- * compareArrays() not invoking when sentence is complete
+/**
+ * userAnswer length seems to be coming from the previous word
  */
 
+//gets words from a random word API, assigns word to game.answer
+let apiHandler = {
+    load: function() {
+        const xhr = new XMLHttpRequest();
+        //if api key expires https://random-word-api.herokuapp.com/
+        xhr.open("GET", "https://random-word-api.herokuapp.com/word?key=9E4Z4S7A&number=1", true);
+        
+        xhr.onload = function() {
+            //status 200: "Ok" | 403: "Forbidden" | 404: "Not Found"
+            if(xhr.status == 200) {
+                let word = JSON.parse(this.responseText);
+                game.answer = word[0].toUpperCase();
+            }
+            else {
+                console.log("xhr status is " + xhr.status);
+            }
+        };
+        xhr.send();
+    }
+}
+
+
+
+//does all processing for game
 let game = {
-    //correct answer, user input is compared against this
-    answer: "I love JavaScript".toUpperCase().split(""),
+    //answer to guess, pulled from random-word API onload
+    answer: "TEST",
     //stores user input
     userAnswer: [],
-    //node list of all user inpput options
+    //node list of all user input options
     alphabet: document.querySelectorAll("figure"),
     //number of lives until gameOver()
     chancesLeft: 6,
@@ -41,13 +63,15 @@ let game = {
             console.log("Wrong! " + --game.chancesLeft + " changes left.");
             view.drawHangMan();
         }
-        //otherwise check if game is over (userAnwer === answer)
+
+        //otherwise check if game is over (userAnswer === answer)
         else {
             game.compareArrays();
         }
     },
     //adds _ to each letter and " " to each " " in userAnswer array, to match answer array.
     getAnswerLength: function() {
+        game.userAnswer = [];
         for(let i = 0; i < game.answer.length; i++) {
             game.answer[i] === " " ? game.userAnswer.push(" ") : game.userAnswer.push("_");
         }
@@ -56,8 +80,8 @@ let game = {
     //compares userAnswer to answer array, if they are the same, game is won
     compareArrays: function() {
         let isComplete = true;
-        for(let i = 0; i < this.answer.length; i++) {
-            if(this.userAnswer[i] == this.answer[i]) {
+        for(let i = 0; i < game.answer.length; i++) {
+            if(game.userAnswer[i] == game.answer[i]) {
                 isComplete = true;
             }
             else {
@@ -71,6 +95,9 @@ let game = {
     }
 }
 
+
+
+//outputs data processed by game to DOM
 let view = {
     //outputs userAnswer to DOM
     outputAnswer: function() {
@@ -110,18 +137,28 @@ let view = {
         youWinContainer.classList.toggle("hide");
         overlay.classList.toggle("hide");
     },
-    //hides main menu when user clicks "play"
+    //hides all overlay menus
     playGame: function() {
+        let gameOverContainer = document.getElementById("game-over");
+        let youWinContainer = document.getElementById("you-win");
         let mainMenuContainer = document.getElementById("main-menu");
         let overlay = document.getElementById("overlay");
 
+        gameOverContainer.classList.add("hide");
+        youWinContainer.classList.add("hide");
         mainMenuContainer.classList.add("hide");
         overlay.classList.add("hide");
+
+        apiHandler.load();
         game.getAnswerLength();
+        this.enableLetters();
     },
     //adds .not-valid class to targeted letters
     disableLetter: function(letter) {
         letter.classList.add("not-valid");
+    },
+    enableLetters: function() {
+        game.alphabet.forEach((letter) => letter.classList.remove("not-valid"));
     }
 }
 //creates a node list of all letter options in DOM
