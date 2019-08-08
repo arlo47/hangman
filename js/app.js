@@ -1,7 +1,3 @@
-/**
- * userAnswer length seems to be coming from the previous word
- */
-
 //gets words from a random word API, assigns word to game.answer
 let apiHandler = {
     load: function() {
@@ -60,7 +56,6 @@ let game = {
         
         //if not match wasWrong = true, lose a life and drawHangMan()
         if(wasWrong) {
-            console.log("Wrong! " + --game.chancesLeft + " changes left.");
             view.drawHangMan();
         }
 
@@ -128,6 +123,8 @@ let view = {
 
         gameOverContainer.classList.toggle("hide");
         overlay.classList.toggle("hide");
+
+        apiHandler.load();
     },
     //shows #you-win and #overlay elements in DOM when you win
     gameWon: function() {
@@ -136,6 +133,8 @@ let view = {
 
         youWinContainer.classList.toggle("hide");
         overlay.classList.toggle("hide");
+
+        apiHandler.load();
     },
     //hides all overlay menus
     playGame: function() {
@@ -149,7 +148,6 @@ let view = {
         mainMenuContainer.classList.add("hide");
         overlay.classList.add("hide");
 
-        apiHandler.load();
         game.getAnswerLength();
         this.enableLetters();
     },
