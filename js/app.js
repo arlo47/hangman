@@ -2,8 +2,8 @@
 let apiHandler = {
     load: function() {
         const xhr = new XMLHttpRequest();
-        //if api key expires https://random-word-api.herokuapp.com/
-        xhr.open("GET", "https://random-word-api.herokuapp.com/word?key=9E4Z4S7A&number=1", true);
+        //if you are only getting "W" it is because the api key expires https://random-word-api.herokuapp.com/ (it will get "Wrong API key", word[0] of this is "w")
+        xhr.open("GET", "https://random-word-api.herokuapp.com/word?key=2W1V6L09&number=1", true);
         
         xhr.onload = function() {
             //status 200: "Ok" | 403: "Forbidden" | 404: "Not Found"
@@ -20,28 +20,29 @@ let apiHandler = {
 }
 
 
-
 //does all processing for game
 let game = {
-    //answer to guess, pulled from random-word API onload
-    answer: "TEST",
-    //stores user input
-    userAnswer: [],
-    //node list of all user input options
-    alphabet: document.querySelectorAll("figure"),
-    //number of lives until gameOver()
-    chancesLeft: 6,
-    //used for hangmanArr index
-    hangIndex: 0,
+    answer: "TEST",                                     //answer to guess, pulled from random-word API onload
+    userAnswer: [],                                     //stores user input
+    alphabet: document.querySelectorAll("figure"),      //node list of all user input options
+    chancesLeft: 6,                                     //number of lives until gameOver()
+    hangIndex: 0,                                       //used for hangmanArr index
     userGuess: function(e) {
         let letter = e.target.innerText.toUpperCase();
-        let wasWrong = true;
-
+        
         //.not-valid makes the letter inactive (after being selected). You can only select each letter once.
         if(e.target.classList.contains("not-valid")) {
             return;
         }
-
+        let wasWrong = game.populateUserAnswer(letter);
+        view.outputAnswer();
+        view.disableLetter(e.target);
+        
+        wasWrong ? view.drawHangMan() : game.compareWords();
+    },
+    populateUserAnswer: function(letter) {
+        let wasWrong = true;
+        
         //if letter matches letters in answer array, add to userAnswer array
         for(let i = 0; i < game.answer.length; i++) {
             if(letter === game.answer[i]) {
@@ -49,20 +50,7 @@ let game = {
                 wasWrong = false;
             }
         }
-
-        view.outputAnswer();
-        //add .not-valid to targeted letter
-        view.disableLetter(e.target);
-        
-        //if not match wasWrong = true, lose a life and drawHangMan()
-        if(wasWrong) {
-            view.drawHangMan();
-        }
-
-        //otherwise check if game is over (userAnswer === answer)
-        else {
-            game.compareArrays();
-        }
+        return wasWrong;
     },
     //adds _ to each letter and " " to each " " in userAnswer array, to match answer array.
     getAnswerLength: function() {
@@ -73,7 +61,7 @@ let game = {
         view.outputAnswer();
     },
     //compares userAnswer to answer array, if they are the same, game is won
-    compareArrays: function() {
+    compareWords: function() {
         let isComplete = true;
         for(let i = 0; i < game.answer.length; i++) {
             if(game.userAnswer[i] == game.answer[i]) {
@@ -85,15 +73,16 @@ let game = {
             }
         }
         if(isComplete) {
-            view.gameWon();
+            view.gameOver("you-win");
         }
     }
 }
 
 
-
 //outputs data processed by game to DOM
 let view = {
+    hangman: document.getElementById("hangman"),
+    hangmanArr: ["hangman-0.jpg", "hangman-1.jpg", "hangman-2.jpg", "hangman-3.jpg", "hangman-4.jpg", "hangman-5.jpg", "hangman-6.jpg"],
     //outputs userAnswer to DOM
     outputAnswer: function() {
         let answerContainer = document.getElementById("answer-container");
@@ -102,50 +91,42 @@ let view = {
         answerContainer.innerHTML = game.userAnswer.join("");
     },
     //adds to hangman drawing each time you guess incorrectly
-    drawHangMan: function() {
-        let hangman = document.getElementById("hangman");
-        let hangmanArr = ["hangman-0.jpg", "hangman-1.jpg", "hangman-2.jpg", "hangman-3.jpg", "hangman-4.jpg", "hangman-5.jpg", "hangman-6.jpg"];
-        
+    drawHangMan: function() {        
         if(game.hangIndex < 5) {
             game.hangIndex++;
-            hangman.src = "img/" + hangmanArr[game.hangIndex];
+            this.hangman.src = "img/" + this.hangmanArr[game.hangIndex];
         } 
-        else {
-            game.hangIndex++;
-            hangman.src = "img/" + hangmanArr[game.hangIndex];
-            view.gameOver();
+        else {    
+            view.gameOver("you-lose");
+
+            game.hangIndex = 0;
+            this.hangman.src = "img/" + this.hangmanArr[game.hangIndex];  
         }        
     },
     //shows #game-over and #overlay elements in DOM when you lose
-    gameOver: function() {
-        let gameOverContainer = document.getElementById("game-over");
+    gameOver: function(result) {
+        let resultMenu = document.getElementById(result);
         let overlay = document.getElementById("overlay");
 
-        gameOverContainer.classList.toggle("hide");
-        overlay.classList.toggle("hide");
+        resultMenu.classList.remove("hide");
+        overlay.classList.remove("hide");
 
-        apiHandler.load();
-    },
-    //shows #you-win and #overlay elements in DOM when you win
-    gameWon: function() {
-        let youWinContainer = document.getElementById("you-win");
-        let overlay = document.getElementById("overlay");
-
-        youWinContainer.classList.toggle("hide");
-        overlay.classList.toggle("hide");
+        //resets hangman image
+        game.hangIndex = 0;
+        this.hangman.src = "img/" + this.hangmanArr[game.hangIndex];
 
         apiHandler.load();
     },
     //hides all overlay menus
-    playGame: function() {
-        let gameOverContainer = document.getElementById("game-over");
-        let youWinContainer = document.getElementById("you-win");
-        let mainMenuContainer = document.getElementById("main-menu");
+    startGame: function() {
+        let loseMenu = document.getElementById("you-lose");
+        let winMenu = document.getElementById("you-win");
+        let mainMenu = document.getElementById("main-menu");
         let overlay = document.getElementById("overlay");
 
-        gameOverContainer.classList.add("hide");
-        youWinContainer.classList.add("hide");
-        mainMenuContainer.classList.add("hide");
+        loseMenu.classList.add("hide");
+        winMenu.classList.add("hide");
+        mainMenu.classList.add("hide");
         overlay.classList.add("hide");
 
         game.getAnswerLength();
@@ -159,5 +140,6 @@ let view = {
         game.alphabet.forEach((letter) => letter.classList.remove("not-valid"));
     }
 }
+
 //creates a node list of all letter options in DOM
 game.alphabet.forEach((letter) => letter.addEventListener("click", game.userGuess));

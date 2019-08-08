@@ -47,7 +47,7 @@ main {
     text-align: center;
 }
 
-#game-over, #you-win {
+#you-lose, #you-win {
     width: 200px;
     height: 75px;
     background-color: #FFF;
@@ -90,12 +90,12 @@ main {
 /*
 ** General
 */
-#game-over > *, #main-menu > *, #you-win > * {
+#you-lose > *, #main-menu > *, #you-win > * {
     display: block;
     margin: 0 auto;
 }
 
-#game-over a, #main-menu a, #you-win a {
+#you-lose a, #main-menu a, #you-win a {
     font-size: 12px;
     text-decoration: none;
     background-color: #000;
@@ -105,7 +105,7 @@ main {
     width: 70px;
 }
 
-#game-over a:hover {
+#you-lose a:hover {
     background-color: #2b2b2b;
 }
 
@@ -127,6 +127,24 @@ figure {
     text-align: center;
 }
 
+.box-1 {
+    border-width: 2px 3px 2px 4px;
+    border-radius:95% 4% 92% 5%/4% 95% 6% 95%;
+    transform: rotate(2deg);
+}
+
+.box-2 {
+    border-width: 3px 2px 3px 2px;
+    border-radius:94% 3% 93% 6%/3% 94% 5% 93%;
+    transform: rotate(2deg);
+}
+
+.box-3 {
+    border-width: 4px 2px 2px 2px;
+    border-radius:96% 2% 96% 5%/3% 96% 3% 96%;
+    transform: rotate(2deg);
+}
+
 #hangman-container img {
     width: 250px;
     height: auto;
@@ -145,4 +163,8 @@ figure:hover {
 .not-valid {
     cursor: not-allowed !important;
     opacity: 0.6;
+}
+
+.not-valid:hover {
+    background-color: transparent !important;
 }
