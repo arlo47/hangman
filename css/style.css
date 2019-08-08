@@ -9,9 +9,16 @@
     font-style: normal;
 
 }
+
 /*
 ** Layout
 */
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
 main {
     width: 600px;
     margin: 0 auto;
@@ -40,19 +47,29 @@ section#answer-container {
     text-align: center;
 }
 
-section#game-over {
+section#game-over, section#main-menu {
     width: 200px;
     height: 75px;
     background-color: #FFF;
+    color: #000;
     text-align: center;
     font-family: 'bangersregular';
     font-size: 60px;
     padding: 25px 50px;
+    position: relative;
+    z-index: 99;
+    box-shadow: 3px 3px 20px #000;
+    margin: -400px auto;
+}
+
+section#overlay {
     position: absolute;
-    z-index: 9999;
-    top: 25%;
-    left: 25%;
-    box-shadow: 3px 3px 20px #888888;
+    z-index: 98;
+    background-color: #000;
+    opacity: 0.7;
+    width: 100%;
+    height: 100%;
+    top: 0;
 }
 
 /*
