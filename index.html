@@ -7,18 +7,16 @@
     <title>Hang Man</title>
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
-<body onload="view.outputAnswer()">
+<body>
     <main>
-        <h1>Hangman!</h1>
-
-        <section id="hangman-container">
+        <div id="hangman-container">
             <img id="hangman" src="img/hangman-0.jpg" alt="The Hang Man">
-        </section>
+        </div>
 
-        <section id="answer-container">
-        </section>
+        <div id="answer-container">
+        </div>
 
-        <section id="letter-container">
+        <div id="letter-container">
             <figure>A</figure>
             <figure>B</figure>
             <figure>C</figure>
@@ -45,20 +43,24 @@
             <figure>X</figure>
             <figure>Y</figure>
             <figure>Z</figure>
-        </section>
+        </div>
     </main>
     
 
-    <section id="game-over" class="hide">
+    <div id="game-over" class="hide">
         <span>YOU LOSE!</span>
         <a href="index.html">Play Again?</a>
-    </section>
-    <section id="main-menu" class="hide">
+    </div>
+    <div id="you-win" class="hide">
+        <span>YOU WIN!</span>
+        <a href="index.html">Play Again?</a>
+    </div>
+    <div id="main-menu">
         <span>Welcome to Hang Man!</span>
-        <a href="index.html">Play!</a>
-    </section>
-    <section id="overlay" class="hide">
-    </section>
+        <a href="#" onclick="view.playGame()">Play!</a>
+    </div>
+    <div id="overlay">
+    </div>
 
 
     <script src="js/app.js"></script>

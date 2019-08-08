@@ -21,10 +21,10 @@ body {
 
 main {
     width: 600px;
-    margin: 0 auto;
+    margin: 50px auto;
 }
 
-section#letter-container {
+#letter-container {
     display: grid;
     grid-gap: 10px;
     grid-template-columns: repeat(13, 36px);
@@ -33,12 +33,12 @@ section#letter-container {
     padding-top: 10px;
 }
 
-section#hangman-container {
+#hangman-container {
     margin-bottom: 30px;
     height: 280px;
 }
 
-section#answer-container {
+#answer-container {
     height: 45px;
     padding: 10px 0;
     font-family: 'bangersregular';
@@ -47,7 +47,7 @@ section#answer-container {
     text-align: center;
 }
 
-section#game-over, section#main-menu {
+#game-over, #you-win {
     width: 200px;
     height: 75px;
     background-color: #FFF;
@@ -62,7 +62,22 @@ section#game-over, section#main-menu {
     margin: -400px auto;
 }
 
-section#overlay {
+#main-menu {
+    width: 300px;
+    height: 145px;
+    background-color: #FFF;
+    color: #000;
+    text-align: center;
+    font-family: 'bangersregular';
+    font-size: 60px;
+    padding: 25px 50px;
+    position: relative;
+    z-index: 99;
+    box-shadow: 3px 3px 20px #000;
+    margin: -400px auto;
+}
+
+#overlay {
     position: absolute;
     z-index: 98;
     background-color: #000;
@@ -75,12 +90,12 @@ section#overlay {
 /*
 ** General
 */
-section#game-over > * {
+#game-over > *, #main-menu > *, #you-win > * {
     display: block;
     margin: 0 auto;
 }
 
-section#game-over a {
+#game-over a, #main-menu a, #you-win a {
     font-size: 12px;
     text-decoration: none;
     background-color: #000;
@@ -90,7 +105,7 @@ section#game-over a {
     width: 70px;
 }
 
-section#game-over a:hover {
+#game-over a:hover {
     background-color: #2b2b2b;
 }
 
@@ -112,7 +127,7 @@ figure {
     text-align: center;
 }
 
-section#hangman-container img {
+#hangman-container img {
     width: 250px;
     height: auto;
     display: block;
@@ -125,4 +140,9 @@ figure:hover {
 
 .hide {
     display: none;
+}
+
+.not-valid {
+    cursor: not-allowed !important;
+    opacity: 0.6;
 }
