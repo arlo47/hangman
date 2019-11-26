@@ -1,21 +1,17 @@
 //gets words from a random word API, assigns word to game.answer
 let apiHandler = {
-    load: function() {
-        const xhr = new XMLHttpRequest();
-        //if you are only getting "W" it is because the api key expires https://random-word-api.herokuapp.com/ (it will get "Wrong API key", word[0] of this is "w")
-        xhr.open("GET", "https://random-word-api.herokuapp.com/word?key=2W1V6L09&number=1", true);
-        
-        xhr.onload = function() {
-            //status 200: "Ok" | 403: "Forbidden" | 404: "Not Found"
-            if(xhr.status == 200) {
-                let word = JSON.parse(this.responseText);
-                game.answer = word[0].toUpperCase();
-            }
-            else {
-                console.log("xhr status is " + xhr.status);
-            }
-        };
-        xhr.send();
+    load: async function() {
+
+        try {
+            //if the API is only returning "W" it is because the api key has expired https://random-word-api.herokuapp.com/ (it will get "Wrong API key", word[0] of this is "w")
+            const data = await fetch("https://random-word-api.herokuapp.com/word?key=XT8AWNC8&number=1");
+            const word = await data.json();
+
+            game.answer = word[0].toUpperCase();
+        }
+        catch (e) {
+            console.log("error fetching word " + e);
+        }
     }
 }
 
