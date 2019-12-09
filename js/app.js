@@ -1,13 +1,12 @@
-//gets words from a random word API, assigns word to game.answer
+//gets a random word from wordnik's dictionary API, assigns word to game.answer
 let apiHandler = {
     load: async function() {
 
         try {
-            //if the API is only returning "W" it is because the api key has expired https://random-word-api.herokuapp.com/ (it will get "Wrong API key", word[0] of this is "w")
-            const data = await fetch("https://random-word-api.herokuapp.com/word?key=XT8AWNC8&number=1");
+            const data = await fetch('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=0&minLength=5&maxLength=15&limit=1&api_key=6jtvn87jnwo7bl01un67btp03gr8s1b164i7e322g8aywy2d2');
             const word = await data.json();
 
-            game.answer = word[0].toUpperCase();
+            game.answer = word[0].word.toUpperCase();
         }
         catch (e) {
             console.log("error fetching word " + e);
@@ -16,13 +15,15 @@ let apiHandler = {
 }
 
 
-//does all processing for game
 let game = {
-    answer: "TEST",                                     //answer to guess, pulled from random-word API onload
+    answer: "TEST",                                     //answer to guess, pulled from API onload
     userAnswer: [],                                     //stores user input
     alphabet: document.querySelectorAll("figure"),      //node list of all user input options
     chancesLeft: 6,                                     //number of lives until gameOver()
-    hangIndex: 0,                                       //used for hangmanArr index
+    hangIndex: 0,                                       //keeps track of how much of the hangman is drawn
+    
+    //Gets user selected letter, disables letter on html page, 
+    //invokes drawHangMan() or compareWords() based on boolean return from populateUserAnswer()
     userGuess: function(e) {
         let letter = e.target.innerText.toUpperCase();
         
@@ -36,6 +37,8 @@ let game = {
         
         wasWrong ? view.drawHangMan() : game.compareWords();
     },
+
+    //checks if user selected letter is in the answer, returns boolean based on this.
     populateUserAnswer: function(letter) {
         let wasWrong = true;
         
